@@ -77,8 +77,8 @@
           }
           // Once the active circle reaches max size, stop growing and start shrinking the others
           if (wc.radius >= maxRadius) {
-            wc.isActive = false; // Stop growing the current circle
-            setActiveCircle(i);   // Activate the next circle
+            wc.growth = false;
+            setActiveCircle(i);
           }
         } else {
           // Shrink inactive circles
@@ -91,9 +91,11 @@
 
     function setActiveCircle(index) {
       // Reset the growth for all circles and activate the next one
-      wordCircles[index].isActive = false;
+      for (let i = 0; i < wordCircles.length; i++) {
+        wordCircles[i].isActive = false;
+      }
+      wordCircles[index].isActive = true;
       activeIndex = (index + 1) % wordCircles.length; // Move to the next circle
-      wordCircles[activeIndex].isActive = true; // Set the next circle to be active
     }
   </script>
 </body>
