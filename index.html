@@ -15,37 +15,39 @@
       height: 100vh;
       overflow: hidden;
       flex-direction: column;
-    }
-    #left-text, #right-text {
-      font-family: 'Arial', sans-serif;
-      font-weight: 100;
-      font-size: 24px;
-      color: #808080;
-    }
-    #left-text {
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    #right-text {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
+      text-align: center;
     }
     canvas {
       font-family: 'Arial', sans-serif;
       font-weight: 100;
+      position: absolute;
+    }
+    #topText, #bottomText {
+      font-family: 'Arial', sans-serif;
+      color: #808080;
+      font-weight: 100;
+    }
+    #topText {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      font-size: 24px;
+    }
+    #bottomText {
+      position: absolute;
+      bottom: 10%;
+      right: 10%;
+      font-size: 24px;
     }
   </style>
 </head>
 <body>
-  <div id="left-text">I blend</div>
+  <div id="topText">I blend</div>
+  <div id="bottomText">to craft intuitive experiences.</div>
   <script>
     let words = ["Creativity", "Functionality", "Empathy", "Innovation"];
     let wordCircles = [];
-    let maxRadius = 120; // Adjusted max radius
+    let maxRadius = 100; // Adjusted max radius for closer circles
     let minRadius = 50;  // Adjusted min radius
     let growthSpeed = 0.5;
     let activeIndex = -1;
@@ -53,7 +55,7 @@
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
-      let padding = 10; // Reduced padding for closer circles
+      let padding = 5; // Reduced padding for closer circles
 
       // Create word circles in a horizontal line
       for (let i = 0; i < words.length; i++) {
@@ -100,7 +102,7 @@
         ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
 
         // Adjust text size based on circle size
-        textSize(wc.radius / 5.5); // Slightly bigger font
+        textSize(wc.radius / 5); // Slightly bigger font size
         fill("#808080");
         text(wc.word, wc.x, wc.y);
       }
@@ -115,6 +117,5 @@
       }
     }
   </script>
-  <div id="right-text">to craft intuitive experiences.</div>
 </body>
 </html>
