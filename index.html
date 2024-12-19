@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interactive Dynamic Words as Circles</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -63,38 +63,4 @@
             // Make this circle grow and others shrink
             activeIndex = i;
             for (let j = 0; j < wordCircles.length; j++) {
-              wordCircles[j].growing = j === i;
-            }
-          }
-        }
-
-        // Handle growing and shrinking
-        if (wc.growing && wc.radius < maxRadius) {
-          wc.radius += growthSpeed;
-        } else if (!wc.growing && wc.radius > minRadius) {
-          wc.radius -= growthSpeed;
-        }
-
-        // Draw circle with gray stroke
-        noFill();
-        stroke("#808080");
-        ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
-
-        // Adjust text size based on circle size
-        textSize(wc.radius / 3);
-        fill("#808080"); // Gray text color
-        text(wc.word, wc.x, wc.y);
-      }
-    }
-
-    function mouseMoved() {
-      // Reset activeIndex if cursor is not on any circle
-      let hoverIndex = wordCircles.findIndex(wc => dist(mouseX, mouseY, wc.x, wc.y) < wc.radius);
-      if (hoverIndex === -1) {
-        activeIndex = -1;
-        for (let wc of wordCircles) wc.growing = false;
-      }
-    }
-  </script>
-</body>
-</html>
+     
