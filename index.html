@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic Words as Circles</title>
+  <title>Interactive Dynamic Words as Circles</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   <style>
     body {
@@ -13,7 +13,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: white; /* White background */
+      background-color: white;
       overflow: hidden;
     }
   </style>
@@ -24,9 +24,10 @@
     let wordCircles = [];
     let maxRadius = 80;
     let minRadius = 30;
-    let growthSpeed = 2;
-    let shrinkSpeed = 0.5;
-    let activeIndex = 0; // Tracks which circle is active and growing
+    let growthSpeed = 0.5; // Slower growth speed
+    let shrinkSpeed = 0.2; // Slower shrink speed
+    let activeIndex = -1; // Tracks which circle is active and growing
+    let cursorOverIndex = -1; // Tracks which circle the cursor is over
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
@@ -42,8 +43,8 @@
           x: x,
           y: y,
           radius: minRadius,
-          growth: true,
-          isActive: i === activeIndex // Set the first circle to be active
+          growth: false, // Initially, no circle is growing
+          isActive: false, // Tracks if the circle is growing or not
         };
         wordCircles.push(wordCircle);
       }
@@ -51,6 +52,9 @@
 
     function draw() {
       background(255); // White background
+
+      // Check which circle the cursor is over
+      cursorOverIndex = getCircleUnderCursor();
 
       // Loop through each word circle
       for (let i = 0; i < wordCircles.length; i++) {
@@ -62,40 +66,50 @@
         ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
 
         // Adjust text size to fit inside the circle
-        let textSizeFactor = wc.radius / 3; // You can adjust this factor to change how big the text is
+        let textSizeFactor = wc.radius / 3;
         textSize(textSizeFactor);
 
         // Draw text inside the circle
         fill(0); // Black text
         text(wc.word, wc.x, wc.y);
 
-        // Update the size of the circle
-        if (wc.isActive) {
-          // Grow the active circle
+        // Check if the circle is under the cursor
+        if (cursorOverIndex === i) {
+          if (!wc.isActive && wc.radius < maxRadius) {
+            wc.isActive = true; // Start growing the circle under the cursor
+          }
+          // Stop shrinking if the circle is under the cursor
           if (wc.radius < maxRadius) {
             wc.radius += growthSpeed;
           }
-          // Once the active circle reaches max size, stop growing and start shrinking the others
+        } else if (wc.isActive) {
+          // Stop the current circle from growing if it's not under the cursor
           if (wc.radius >= maxRadius) {
-            wc.growth = false;
-            setActiveCircle(i);
+            wc.isActive = false;
           }
-        } else {
-          // Shrink inactive circles
+          // Shrink other circles
           if (wc.radius > minRadius) {
             wc.radius -= shrinkSpeed;
           }
         }
+
+        // If the circle is not the active one, shrink it
+        if (wc.isActive && wc.radius < maxRadius) {
+          wc.radius += growthSpeed;
+        }
       }
     }
 
-    function setActiveCircle(index) {
-      // Reset the growth for all circles and activate the next one
+    // Function to check if cursor is over a circle
+    function getCircleUnderCursor() {
       for (let i = 0; i < wordCircles.length; i++) {
-        wordCircles[i].isActive = false;
+        let wc = wordCircles[i];
+        let distance = dist(mouseX, mouseY, wc.x, wc.y);
+        if (distance < wc.radius) {
+          return i; // Return index of the circle under the cursor
+        }
       }
-      wordCircles[index].isActive = true;
-      activeIndex = (index + 1) % wordCircles.length; // Move to the next circle
+      return -1; // No circle under cursor
     }
   </script>
 </body>
