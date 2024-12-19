@@ -13,12 +13,11 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: white;
       overflow: hidden;
     }
     canvas {
-      font-family: 'Arial', sans-serif; /* Using system Arial font */
-      font-weight: 100; /* Thin font weight */
+      font-family: 'Arial', sans-serif;
+      font-weight: 100;
     }
   </style>
 </head>
@@ -26,15 +25,15 @@
   <script>
     let words = ["Creativity", "Functionality", "Empathy", "Innovation"];
     let wordCircles = [];
-    let maxRadius = 200; // Increased max radius
-    let minRadius = 50;  // Increased min radius
-    let growthSpeed = 0.5; // Growth and shrink speed
-    let activeIndex = -1; // Currently growing circle
+    let maxRadius = 120; // Adjusted max radius
+    let minRadius = 50;  // Adjusted min radius
+    let growthSpeed = 0.5;
+    let activeIndex = -1;
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
-      let padding = 20; // Adjusted padding for larger circles
+      let padding = 10; // Reduced padding for closer circles
 
       // Create word circles in a horizontal line
       for (let i = 0; i < words.length; i++) {
@@ -52,7 +51,7 @@
     }
 
     function draw() {
-      background(255); // White background
+      clear(); // Transparent background
 
       for (let i = 0; i < wordCircles.length; i++) {
         let wc = wordCircles[i];
@@ -81,8 +80,8 @@
         ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
 
         // Adjust text size based on circle size
-        textSize(wc.radius / 5); // Adjusted font size relative to circle size
-        fill("#808080"); // Gray text color
+        textSize(wc.radius / 6); // Decreased font size for thinner look
+        fill("#808080");
         text(wc.word, wc.x, wc.y);
       }
     }
