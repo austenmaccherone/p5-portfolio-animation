@@ -13,7 +13,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: black;
+      background-color: white; /* White background */
       overflow: hidden;
     }
   </style>
@@ -26,11 +26,11 @@
     let minRadius = 30;
     let growthSpeed = 2;
     let shrinkSpeed = 0.5;
+    let activeIndex = 0; // Tracks which circle is active and growing
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
-      let totalWidth = 0;
       let padding = 50;
       
       // Create word circles in a line
@@ -42,22 +42,23 @@
           x: x,
           y: y,
           radius: minRadius,
-          growth: true
+          growth: true,
+          isActive: i === activeIndex // Set the first circle to be active
         };
         wordCircles.push(wordCircle);
       }
     }
 
     function draw() {
-      background(0); // Black background
+      background(255); // White background
 
       // Loop through each word circle
       for (let i = 0; i < wordCircles.length; i++) {
         let wc = wordCircles[i];
 
-        // Draw circle
-        fill(255); // White circle
-        stroke(255);
+        // Draw circle with black stroke
+        noFill();
+        stroke(0); // Black stroke
         ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
 
         // Adjust text size to fit inside the circle
@@ -69,18 +70,32 @@
         text(wc.word, wc.x, wc.y);
 
         // Update the size of the circle
-        if (wc.growth) {
-          wc.radius += growthSpeed;
+        if (wc.isActive) {
+          // Grow the active circle
+          if (wc.radius < maxRadius) {
+            wc.radius += growthSpeed;
+          }
+          // Once the active circle reaches max size, stop growing and start shrinking the others
           if (wc.radius >= maxRadius) {
-            wc.growth = false; // Start shrinking once max size is reached
+            wc.growth = false;
+            setActiveCircle(i);
           }
         } else {
-          wc.radius -= shrinkSpeed;
-          if (wc.radius <= minRadius) {
-            wc.growth = true; // Start growing once min size is reached
+          // Shrink inactive circles
+          if (wc.radius > minRadius) {
+            wc.radius -= shrinkSpeed;
           }
         }
       }
+    }
+
+    function setActiveCircle(index) {
+      // Reset the growth for all circles and activate the next one
+      for (let i = 0; i < wordCircles.length; i++) {
+        wordCircles[i].isActive = false;
+      }
+      wordCircles[index].isActive = true;
+      activeIndex = (index + 1) % wordCircles.length; // Move to the next circle
     }
   </script>
 </body>
