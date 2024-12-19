@@ -14,20 +14,41 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
-      flex-direction: row;
+      flex-direction: column;
+      text-align: center;
     }
+
     canvas {
       font-family: 'Arial', sans-serif;
       font-weight: 100;
+    }
+
+    .text {
+      color: #808080;
+      font-family: 'Arial', sans-serif;
+      font-weight: 100;
+      font-size: 24px; /* Adjust font size */
+    }
+
+    #top-text {
       position: absolute;
+      top: 20%;
+    }
+
+    #bottom-text {
+      position: absolute;
+      bottom: 20%;
     }
   </style>
 </head>
 <body>
+  <div id="top-text" class="text">I blend</div>
+  <div id="bottom-text" class="text">to craft intuitive experiences.</div>
+
   <script>
     let words = ["Creativity", "Functionality", "Empathy", "Innovation"];
     let wordCircles = [];
-    let maxRadius = 100; // Adjusted max radius for closer circles
+    let maxRadius = 120; // Adjusted max radius
     let minRadius = 50;  // Adjusted min radius
     let growthSpeed = 0.5;
     let activeIndex = -1;
@@ -35,12 +56,12 @@
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
-      let padding = 20; // Reduced padding for closer circles
+      let padding = 30; // Reduced padding for closer circles
 
       // Create word circles in a horizontal line
       for (let i = 0; i < words.length; i++) {
         let x = width / 2 - (words.length - 1) * (maxRadius * 2 + padding) / 2 + i * (maxRadius * 2 + padding);
-        let y = height / 2; // Center vertically
+        let y = height / 2;
         let wordCircle = {
           word: words[i],
           x: x,
@@ -55,7 +76,6 @@
     function draw() {
       clear(); // Transparent background
 
-      // Draw the word circles
       for (let i = 0; i < wordCircles.length; i++) {
         let wc = wordCircles[i];
 
@@ -83,7 +103,7 @@
         ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
 
         // Adjust text size based on circle size
-        textSize(wc.radius / 5); // Slightly bigger font size
+        textSize(wc.radius / 5); // Increased font size for better readability
         fill("#808080");
         text(wc.word, wc.x, wc.y);
       }
