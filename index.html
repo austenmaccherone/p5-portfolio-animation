@@ -35,12 +35,12 @@
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
-      let padding = 5; // Reduced padding for closer circles
+      let padding = 20; // Reduced padding for closer circles
 
       // Create word circles in a horizontal line
       for (let i = 0; i < words.length; i++) {
         let x = width / 2 - (words.length - 1) * (maxRadius * 2 + padding) / 2 + i * (maxRadius * 2 + padding);
-        let y = height / 2;
+        let y = height / 2; // Center vertically
         let wordCircle = {
           word: words[i],
           x: x,
