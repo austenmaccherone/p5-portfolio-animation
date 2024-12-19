@@ -3,80 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Shapes with Words</title>
+  <title>Dynamic Words as Circles</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: black;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
   <script>
-    let words = ["I blend", "Creativity", "Functionality", "Empathy", "Innovation", "to craft intuitive experiences."];
-    let shapes = [];
-    let currentIndex = 0;
+    let words = ["Creativity", "Functionality", "Empathy", "Innovation"];
+    let wordCircles = [];
+    let maxRadius = 80;
+    let minRadius = 30;
+    let growthSpeed = 2;
+    let shrinkSpeed = 0.5;
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
-      textSize(32);
-
-      // Initialize shapes for each word
+      let totalWidth = 0;
+      let padding = 50;
+      
+      // Create word circles in a line
       for (let i = 0; i < words.length; i++) {
-        let x = width / 2;
-        let y = height / 2 + (i - words.length / 2) * 100;
-        let w = 300;
-        let h = 80;
-        shapes.push(new WordShape(x, y, w, h, words[i]));
+        let x = width / 2 - (words.length - 1) * (maxRadius * 2 + padding) / 2 + i * (maxRadius * 2 + padding);
+        let y = height / 2;
+        let wordCircle = {
+          word: words[i],
+          x: x,
+          y: y,
+          radius: minRadius,
+          growth: true
+        };
+        wordCircles.push(wordCircle);
       }
     }
 
     function draw() {
-      background(255);
+      background(0); // Black background
 
-      // Update and display each shape
-      for (let i = 0; i < shapes.length; i++) {
-        let wordShape = shapes[i];
-        wordShape.update();
-        wordShape.display();
-      }
-    }
+      // Loop through each word circle
+      for (let i = 0; i < wordCircles.length; i++) {
+        let wc = wordCircles[i];
 
-    // WordShape class to represent each word with its shape
-    class WordShape {
-      constructor(x, y, w, h, text) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.text = text;
-        this.size = 32;
-        this.isActive = false;
-      }
+        // Draw circle
+        fill(255); // White circle
+        stroke(255);
+        ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
 
-      update() {
-        // Make the current shape grow and others shrink
-        if (this.text === words[currentIndex]) {
-          this.isActive = true;
-          this.size = lerp(this.size, 64, 0.1); // Gradually grow
+        // Adjust text size to fit inside the circle
+        let textSizeFactor = wc.radius / 3; // You can adjust this factor to change how big the text is
+        textSize(textSizeFactor);
+
+        // Draw text inside the circle
+        fill(0); // Black text
+        text(wc.word, wc.x, wc.y);
+
+        // Update the size of the circle
+        if (wc.growth) {
+          wc.radius += growthSpeed;
+          if (wc.radius >= maxRadius) {
+            wc.growth = false; // Start shrinking once max size is reached
+          }
         } else {
-          this.isActive = false;
-          this.size = lerp(this.size, 32, 0.1); // Shrink back to normal size
+          wc.radius -= shrinkSpeed;
+          if (wc.radius <= minRadius) {
+            wc.growth = true; // Start growing once min size is reached
+          }
         }
       }
-
-      display() {
-        fill(this.isActive ? 'orange' : 'gray');
-        stroke(0);
-        strokeWeight(2);
-        rectMode(CENTER);
-        rect(this.x, this.y, this.w, this.h);
-
-        fill(0);
-        noStroke();
-        textSize(this.size);
-        text(this.text, this.x, this.y);
-      }
-    }
-
-    function mousePressed() {
-      currentIndex = (currentIndex + 1) % words.length;
     }
   </script>
 </body>
