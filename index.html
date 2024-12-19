@@ -14,6 +14,23 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      font-family: 'Arial', sans-serif;
+    }
+    #text-wrapper {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: 100;
+      font-size: 30px;
+    }
+    #text-before {
+      margin-right: 20px;
+    }
+    #text-after {
+      margin-left: 20px;
     }
     canvas {
       font-family: 'Arial', sans-serif;
@@ -22,6 +39,11 @@
   </style>
 </head>
 <body>
+  <div id="text-wrapper">
+    <div id="text-before">I blend</div>
+    <div id="text-after">to craft intuitive experiences.</div>
+  </div>
+  
   <script>
     let words = ["Creativity", "Functionality", "Empathy", "Innovation"];
     let wordCircles = [];
@@ -33,7 +55,7 @@
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
-      let padding = 10; // Reduced padding for closer circles
+      let padding = 5; // Reduced padding for closer circles
 
       // Create word circles in a horizontal line
       for (let i = 0; i < words.length; i++) {
@@ -80,7 +102,7 @@
         ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
 
         // Adjust text size based on circle size
-        textSize(wc.radius / 6); // Decreased font size for thinner look
+        textSize(wc.radius / 5); // Slightly increased font size for a thinner look
         fill("#808080");
         text(wc.word, wc.x, wc.y);
       }
