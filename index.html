@@ -72,3 +72,25 @@
         }
 
         // Draw circle with a black stroke
+        noFill();
+        stroke(0);
+        ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
+
+        // Adjust text size based on circle size
+        textSize(wc.radius / 3);
+        fill(0); // Black text
+        text(wc.word, wc.x, wc.y);
+      }
+    }
+
+    function mouseMoved() {
+      // Reset activeIndex if cursor is not on any circle
+      let hoverIndex = wordCircles.findIndex(wc => dist(mouseX, mouseY, wc.x, wc.y) < wc.radius);
+      if (hoverIndex === -1) {
+        activeIndex = -1;
+        for (let wc of wordCircles) wc.growing = false;
+      }
+    }
+  </script>
+</body>
+</html>
