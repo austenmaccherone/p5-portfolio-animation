@@ -14,15 +14,31 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      flex-direction: column;
+      text-align: center;
     }
 
     canvas {
       font-family: 'Arial', sans-serif;
       font-weight: 100;
     }
+
+    /* Style for fallback text */
+    .fallback {
+      font-family: 'Arial', sans-serif;
+      font-size: 24px;
+      color: #808080;
+    }
   </style>
 </head>
 <body>
+  <!-- Fallback message if JavaScript is disabled or p5.js fails to load -->
+  <noscript>
+    <div class="fallback">
+      Creativity, Functionality, Empathy, Innovation
+    </div>
+  </noscript>
+
   <script>
     let words = ["Creativity", "Functionality", "Empathy", "Innovation"];
     let wordCircles = [];
