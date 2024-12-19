@@ -14,23 +14,25 @@
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      flex-direction: column;
+    }
+    #left-text, #right-text {
       font-family: 'Arial', sans-serif;
-    }
-    #text-wrapper {
-      display: flex;
-      align-items: center;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       font-weight: 100;
-      font-size: 30px;
+      font-size: 24px;
+      color: #808080;
     }
-    #text-before {
-      margin-right: 20px;
+    #left-text {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
     }
-    #text-after {
-      margin-left: 20px;
+    #right-text {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
     }
     canvas {
       font-family: 'Arial', sans-serif;
@@ -39,11 +41,7 @@
   </style>
 </head>
 <body>
-  <div id="text-wrapper">
-    <div id="text-before">I blend</div>
-    <div id="text-after">to craft intuitive experiences.</div>
-  </div>
-  
+  <div id="left-text">I blend</div>
   <script>
     let words = ["Creativity", "Functionality", "Empathy", "Innovation"];
     let wordCircles = [];
@@ -55,7 +53,7 @@
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
-      let padding = 5; // Reduced padding for closer circles
+      let padding = 10; // Reduced padding for closer circles
 
       // Create word circles in a horizontal line
       for (let i = 0; i < words.length; i++) {
@@ -102,7 +100,7 @@
         ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
 
         // Adjust text size based on circle size
-        textSize(wc.radius / 5); // Slightly increased font size for a thinner look
+        textSize(wc.radius / 5.5); // Slightly bigger font
         fill("#808080");
         text(wc.word, wc.x, wc.y);
       }
@@ -117,5 +115,6 @@
       }
     }
   </script>
+  <div id="right-text">to craft intuitive experiences.</div>
 </body>
 </html>
