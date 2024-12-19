@@ -22,19 +22,17 @@
   <script>
     let words = ["Creativity", "Functionality", "Empathy", "Innovation"];
     let wordCircles = [];
-    let maxRadius = 80;
+    let maxRadius = 100;
     let minRadius = 30;
-    let growthSpeed = 0.5; // Slower growth speed
-    let shrinkSpeed = 0.2; // Slower shrink speed
-    let activeIndex = -1; // Tracks which circle is active and growing
-    let cursorOverIndex = -1; // Tracks which circle the cursor is over
+    let growthSpeed = 0.5; // Growth and shrink speed
+    let activeIndex = -1; // Currently growing circle
 
     function setup() {
       createCanvas(windowWidth, windowHeight);
       textAlign(CENTER, CENTER);
       let padding = 50;
-      
-      // Create word circles in a line
+
+      // Create word circles in a horizontal line
       for (let i = 0; i < words.length; i++) {
         let x = width / 2 - (words.length - 1) * (maxRadius * 2 + padding) / 2 + i * (maxRadius * 2 + padding);
         let y = height / 2;
@@ -43,8 +41,7 @@
           x: x,
           y: y,
           radius: minRadius,
-          growth: false, // Initially, no circle is growing
-          isActive: false, // Tracks if the circle is growing or not
+          growing: false,
         };
         wordCircles.push(wordCircle);
       }
@@ -53,64 +50,25 @@
     function draw() {
       background(255); // White background
 
-      // Check which circle the cursor is over
-      cursorOverIndex = getCircleUnderCursor();
-
-      // Loop through each word circle
       for (let i = 0; i < wordCircles.length; i++) {
         let wc = wordCircles[i];
 
-        // Draw circle with black stroke
-        noFill();
-        stroke(0); // Black stroke
-        ellipse(wc.x, wc.y, wc.radius * 2, wc.radius * 2);
-
-        // Adjust text size to fit inside the circle
-        let textSizeFactor = wc.radius / 3;
-        textSize(textSizeFactor);
-
-        // Draw text inside the circle
-        fill(0); // Black text
-        text(wc.word, wc.x, wc.y);
-
-        // Check if the circle is under the cursor
-        if (cursorOverIndex === i) {
-          if (!wc.isActive && wc.radius < maxRadius) {
-            wc.isActive = true; // Start growing the circle under the cursor
-          }
-          // Stop shrinking if the circle is under the cursor
-          if (wc.radius < maxRadius) {
-            wc.radius += growthSpeed;
-          }
-        } else if (wc.isActive) {
-          // Stop the current circle from growing if it's not under the cursor
-          if (wc.radius >= maxRadius) {
-            wc.isActive = false;
-          }
-          // Shrink other circles
-          if (wc.radius > minRadius) {
-            wc.radius -= shrinkSpeed;
+        // Check if the circle is hovered
+        if (dist(mouseX, mouseY, wc.x, wc.y) < wc.radius) {
+          if (activeIndex !== i) {
+            // Make this circle grow and others shrink
+            activeIndex = i;
+            for (let j = 0; j < wordCircles.length; j++) {
+              wordCircles[j].growing = j === i;
+            }
           }
         }
 
-        // If the circle is not the active one, shrink it
-        if (wc.isActive && wc.radius < maxRadius) {
+        // Handle growing and shrinking
+        if (wc.growing && wc.radius < maxRadius) {
           wc.radius += growthSpeed;
+        } else if (!wc.growing && wc.radius > minRadius) {
+          wc.radius -= growthSpeed;
         }
-      }
-    }
 
-    // Function to check if cursor is over a circle
-    function getCircleUnderCursor() {
-      for (let i = 0; i < wordCircles.length; i++) {
-        let wc = wordCircles[i];
-        let distance = dist(mouseX, mouseY, wc.x, wc.y);
-        if (distance < wc.radius) {
-          return i; // Return index of the circle under the cursor
-        }
-      }
-      return -1; // No circle under cursor
-    }
-  </script>
-</body>
-</html>
+        // Draw circle with a black stroke
